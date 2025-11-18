@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: commerce_server_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postdba
+      POSTGRES_DB: commerce_server
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/data/db:/var/lib/postgresql/data
+    restart: always
