@@ -24,6 +24,8 @@ defmodule CommerceServerWeb.AuthController do
       |> json(%{message: "Logged in successfully", token: Accounts.create_user_api_token(user)})
     end
 
-    %{error: %{message: "Invalid email or password"}}
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: %{message: "Invalid email or password"}})
   end
 end
