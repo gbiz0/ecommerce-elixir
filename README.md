@@ -1,8 +1,47 @@
-# ecommerce-elixir
-just crud in elixir
+# 🛒💜 E-Commerce CRUD Project
 
-Diagram DB Schema
-```
+Este projeto é uma implementação de um sistema básico de E-Commerce com operações **CRUD** (Create, Read, Update, Delete), utilizando **Elixir** no backend para performance e confiabilidade, e **Next.js** no frontend para uma experiência de usuário moderna e reativa.
+
+## 👥 Equipe
+
+| Nome | Função Principal |
+| :--- | :--- |
+| **Gustavo Bizo** | Desenvolvedor Frontend |
+| **Guilherme Grigolin** | Banco de dados |
+| **Ravi Vendramini** | Líder Desenvolvedor Backend |
+
+## 👨‍🏫 Orientação
+
+**Professor Dr. Evandro de Araújo Jardini**
+
+---
+
+## 🚀 Stack Tecnológica
+
+O projeto utiliza uma combinação de tecnologias modernas para garantir **escalabilidade**, **performance** e **manutenibilidade**.
+
+### Backend
+
+* **Elixir:** Linguagem de programação funcional, rodando na Máquina Virtual Erlang (BEAM).
+* **Phoenix Framework:** Framework web de alto desempenho para Elixir (para a API).
+* **Ecto:** Biblioteca de mapeamento objeto-relacional (ORM) para o banco de dados.
+* **PostgreSQL:** Banco de dados relacional robusto.
+
+### Frontend
+
+* **Next.js (React Framework):** Para desenvolvimento frontend moderno e otimizado.
+* **Tailwind CSS:** Framework CSS utility-first para estilização rápida.
+* **Axios / Fetch API:** Para comunicação com a API backend (Elixir/Phoenix).
+
+---
+
+## 🗺️ Arquitetura do Banco de Dados
+
+O banco de dados relacional modela as entidades principais de um sistema de E-commerce.
+
+### 📝 Esquema (DBML/SQL)
+
+```sql
 Table users {
   id integer [primary key]
   username text
@@ -29,6 +68,3 @@ Table orders {
 
 
 Ref order_items: orders.id <> products.id
-```
-
-
