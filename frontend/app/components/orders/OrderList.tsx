@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { Order } from '@/app/models/order';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function OrderList() {
@@ -12,16 +13,44 @@ export default function OrderList() {
       .then(setOrders);
   }, []);
 
+  const handleDelete = async (id: number) => {
+    if (confirm('Você tem certeza que deseja deletar este pedido?')) {
+      await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+      setOrders(orders.filter(o => o.id !== id));
+    }
+  };
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Orders</h2>
-      <ul>
-        {orders.map((order) => (
-          <li key={order.id}>
-            Order #{order.id} - Total: ${order.total}
-          </li>
-        ))}
-      </ul>
+    <div className="bg-white shadow-md rounded-lg p-6">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID do Pedido</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID do Usuário</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produtos</th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-gray-900">{order.id}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-gray-900">{order.user_id}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                {order.order_items?.map(p => p.title).join(', ')}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <Link href={`/orders/${order.id}/edit`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                  Editar
+                </Link>
+                <button onClick={() => handleDelete(order.id)} className="text-red-600 hover:text-red-900">
+                  Deletar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
