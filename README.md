@@ -6,8 +6,8 @@ Este projeto é uma implementação de um sistema básico de E-Commerce com oper
 
 | Nome | Função Principal |
 | :--- | :--- |
-| **Gustavo Bizo** | Desenvolvedor Frontend |
-| **Guilherme Grigolin** | Banco de dados |
+| **Gustavo Bizo** | Banco de Dados |
+| **Guilherme Grigolin** | Desenvolvedor Frontend |
 | **Ravi Vendramini** | Líder Desenvolvedor Backend |
 
 ## 👨‍🏫 Orientação
