@@ -4,37 +4,47 @@ defmodule CommerceServerWeb.Router do
   import CommerceServerWeb.UserAuth
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, html: {CommerceServerWeb.Layouts, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :fetch_current_scope_for_user
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {CommerceServerWeb.Layouts, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:fetch_current_scope_for_user)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", CommerceServerWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :home
+    get("/", PageController, :home)
   end
 
   scope "/api", CommerceServerWeb do
-    pipe_through [:api]
+    pipe_through([:api])
 
-    post "/auth/login", AuthController, :login
-    post "/auth/register", AuthController, :register
+    post("/auth/login", AuthController, :login)
+    post("/auth/register", AuthController, :register)
   end
 
   scope "/api", CommerceServerWeb do
-    pipe_through [:api, :fetch_current_scope_for_api_user]
+    pipe_through([:api, :fetch_current_scope_for_api_user])
 
-    resources "/products", ProductController
-    resources "/orders", OrderController
+    resources("/products", ProductController)
+    resources("/orders", OrderController)
+  end
+
+  def swagger_info do
+    %{
+      basePath: "/api",
+      info: %{
+        version: "1.0",
+        title: "Commerce Server API"
+      }
+    }
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -47,10 +57,10 @@ defmodule CommerceServerWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: CommerceServerWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: CommerceServerWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

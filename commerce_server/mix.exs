@@ -10,7 +10,7 @@ defmodule CommerceServer.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      compilers: [:phoenix_live_view] ++ Mix.compilers(),
+      compilers: [:phoenix_live_view] ++ Mix.compilers() ++ [:phoenix_swagger],
       listeners: [Phoenix.CodeReloader]
     ]
   end
@@ -66,7 +66,10 @@ defmodule CommerceServer.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"},
+      {:poison, "~> 6.0"}
     ]
   end
 

@@ -1,5 +1,6 @@
 services:
   app:
+    command: sh -c "mix deps.get && mix phx.server"
     build:
       context: .
       dockerfile: Dockerfile.dev

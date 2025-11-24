@@ -1,0 +1,11 @@
+{
+  "basePath": "/api",
+  "swagger": "2.0",
+  "paths": {},
+  "definitions": {},
+  "host": "localhost:4000",
+  "info": {
+    "title": "Commerce Server API",
+    "version": "1.0"
+  }
+}
