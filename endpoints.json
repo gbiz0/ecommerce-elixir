@@ -1,0 +1,311 @@
+{
+  "info": {
+    "name": "CRUD DW3",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "auth", "login"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"email\": \"ravi@1\",\n    \"password\": \"ravi123\"\n  }  \n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "auth", "register"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"email\": \"ravi@1\",\n    \"password\": \"ravi123\"\n  }  \n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/products",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "products"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product\": {\n   \"title\": \"Ipsum\",\n   \"description\": \"Ipsum\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Find all",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer fc287bUEK5xVI86tWPwy8C0LPDhpBiYGyQiYu07Tg3c",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/products",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "products"],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/products/2",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "products", "2"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product\": {\n   \"title\": \"Ipsum Changed\",\n   \"description\": \"Ipsum\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/products/2",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "products", "2"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/orders",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "orders"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": {\n    \"description\": \"My second order\",\n    \"user_id\": 2\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/orders/2",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "orders", "2"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/orders/1",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "orders", "1"],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": {\n    \"description\": \"My first edited order\",\n    \"user_id\": 2\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Find all",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer fc287bUEK5xVI86tWPwy8C0LPDhpBiYGyQiYu07Tg3c",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "http://localhost:4000/api/orders",
+              "protocol": "http",
+              "host": ["localhost:4000"],
+              "path": ["api", "orders"],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": []
+}
