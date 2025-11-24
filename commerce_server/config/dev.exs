@@ -2,9 +2,9 @@ import Config
 
 # Configure your database
 config :commerce_server, CommerceServer.Repo,
-  username: "postgres",
-  password: "postdba",
-  hostname: "localhost",
+  username: System.get_env("DB_USERNAME") || "postgres",
+  password: System.get_env("DB_PASSWORD") || "postdba",
+  hostname: System.get_env("DB_HOSTNAME") || "localhost",
   database: "commerce_server",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
@@ -19,7 +19,7 @@ config :commerce_server, CommerceServer.Repo,
 config :commerce_server, CommerceServerWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: String.to_integer(System.get_env("PORT") || "4000")],
+  http: [ip: {0, 0, 0, 0}, port: String.to_integer(System.get_env("PORT") || "4000")],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,

@@ -68,3 +68,14 @@ Table orders {
 
 
 Ref order_items: orders.id <> products.id
+```
+
+### ⚙️ Rodando o Projeto
+
+
+##### Backend
+```sh
+    cd commerce_server
+    docker compose up --build
+    docker compose exec app mix ecto.setup # Necesário apenas a primeira vez que o projeto é iniciado (Cria as tabelas no banco)
+```

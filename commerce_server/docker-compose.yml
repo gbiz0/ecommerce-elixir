@@ -1,14 +1,32 @@
-version: '3.8'
 services:
-  db:
-    image: postgres:14-alpine
-    container_name: commerce_server_db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - /app/_build
+      - /app/deps
+    depends_on:
+      - db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postdba
-      POSTGRES_DB: commerce_server
+      - DB_HOSTNAME=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postdba
+      - SECRET_KEY_BASE=ultra_secret_key_base
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postdba
+      - POSTGRES_DB=commerce_server
     ports:
       - "5432:5432"
     volumes:
-      - ./.docker/data/db:/var/lib/postgresql/data
-    restart: always
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
