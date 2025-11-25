@@ -47,7 +47,10 @@ export async function PUT(
     const body = await request.json();
     const payload = {
       description: body.description,
+      items: body.items,
     };
+
+    console.log(payload);
 
     const res = await fetch(`${BACKEND_URL}/api/orders/${id}`, {
       method: "PUT",
@@ -56,7 +59,9 @@ export async function PUT(
         Accept: "application/json",
         Authorization: authorization,
       },
-      body: JSON.stringify({ order: payload }),
+      body: JSON.stringify({
+        order: payload,
+      }),
     });
 
     if (!res.ok) {
@@ -65,6 +70,8 @@ export async function PUT(
       return new Response(res.statusText, { status: res.status });
     }
     const json = await res.json();
+
+    console.log(json);
     return NextResponse.json(json.data);
   } catch (error) {
     console.error("Order PUT error:", error);
