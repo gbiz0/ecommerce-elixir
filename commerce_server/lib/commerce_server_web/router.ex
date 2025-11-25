@@ -35,6 +35,7 @@ defmodule CommerceServerWeb.Router do
 
     resources("/products", ProductController)
     resources("/orders", OrderController)
+    resources("/users", UserController, only: [:index])
   end
 
   def swagger_info do

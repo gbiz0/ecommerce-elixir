@@ -3,6 +3,7 @@
 import { Product } from '@/app/models/product';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ProductFormProps {
   product?: Product;
@@ -10,6 +11,7 @@ interface ProductFormProps {
 
 export default function ProductForm({ product }: ProductFormProps) {
   const router = useRouter();
+  const { token } = useAuth();
   const [title, setTitle] = useState(product?.title || '');
   const [description, setDescription] = useState(product?.description || '');
 
@@ -23,6 +25,7 @@ export default function ProductForm({ product }: ProductFormProps) {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({ title, description }),
     });

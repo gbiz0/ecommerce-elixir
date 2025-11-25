@@ -1,25 +1,57 @@
 import { NextResponse } from 'next/server';
-import { Product } from '../../../models/product';
 
-let products: Product[] = [
-  { id: 1, title: 'Product 1', description: 'Description for product 1', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 2, title: 'Product 2', description: 'Description for product 2', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-  { id: 3, title: 'Product 3', description: 'Description for product 3', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-];
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
-export async function GET() {
-  return NextResponse.json(products);
+export async function GET(request: Request) {
+  try {
+    const authorization = request.headers.get('Authorization');
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    };
+    if (authorization) {
+        headers['Authorization'] = authorization;
+    }
+
+    const res = await fetch(`${BACKEND_URL}/api/products`, {
+        headers
+    });
+
+    if (!res.ok) {
+       return new Response(res.statusText, { status: res.status });
+    }
+    const json = await res.json();
+    return NextResponse.json(json.data);
+  } catch (error) {
+    console.error('Products GET error:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const { title, description } = await request.json();
-  const newProduct: Product = {
-    id: products.length + 1,
-    title,
-    description,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-  products.push(newProduct);
-  return NextResponse.json(newProduct, { status: 201 });
+  try {
+    const authorization = request.headers.get('Authorization');
+    if (!authorization) {
+        return new Response('Unauthorized', { status: 401 });
+    }
+    const body = await request.json();
+    const res = await fetch(`${BACKEND_URL}/api/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': authorization,
+      },
+      body: JSON.stringify({ product: body }),
+    });
+
+    if (!res.ok) {
+        return new Response(res.statusText, { status: res.status });
+    }
+    const json = await res.json();
+    return NextResponse.json(json.data, { status: 201 });
+  } catch (error) {
+    console.error('Products POST error:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 }

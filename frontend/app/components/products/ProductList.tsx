@@ -3,19 +3,36 @@
 import { Product } from '@/app/models/product';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([]);
+  const { token } = useAuth();
 
   useEffect(() => {
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then(setProducts);
-  }, []);
+    if (token) {
+      fetch('/api/products', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then((res) => {
+        if (res.ok) return res.json();
+        return [];
+      })
+      .then(setProducts)
+      .catch(console.error);
+    }
+  }, [token]);
 
   const handleDelete = async (id: number) => {
     if (confirm('Você tem certeza que deseja deletar este produto?')) {
-      await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      await fetch(`/api/products/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setProducts(products.filter(p => p.id !== id));
     }
   };

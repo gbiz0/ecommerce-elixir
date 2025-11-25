@@ -12,15 +12,27 @@ interface OrderFormProps {
 
 export default function OrderForm({ order }: OrderFormProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { token } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>(order?.order_items?.map(p => p.id) || []);
+  const [description, setDescription] = useState(order?.description || '');
 
   useEffect(() => {
-    fetch('/api/products')
+    if (token) {
+      fetch('/api/products', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then((res) => res.json())
-      .then((data) => setProducts(data.filter((p: Product) => !p.removed)));
-  }, []);
+      .then((data) => {
+        if (Array.isArray(data)) {
+            setProducts(data.filter((p: Product) => !p.removed));
+        }
+      })
+      .catch(console.error);
+    }
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +44,9 @@ export default function OrderForm({ order }: OrderFormProps) {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ user_id: user?.id, product_ids: selectedProductIds }),
+      body: JSON.stringify({ description, product_ids: selectedProductIds }),
     });
 
     router.push('/orders');
@@ -50,6 +63,19 @@ export default function OrderForm({ order }: OrderFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          Descrição
+        </label>
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          rows={3}
+        />
+      </div>
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
           Produtos

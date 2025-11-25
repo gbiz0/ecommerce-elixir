@@ -1,31 +1,62 @@
 import { NextResponse } from 'next/server';
-import { Order } from '../../../models/order';
-import { Product } from '../../../models/product';
 
-const products: Product[] = [
-    { id: 1, title: 'Product 1', description: 'Description 1', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-    { id: 2, title: 'Product 2', description: 'Description 2', created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
-];
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
-let orders: Order[] = [
-  { id: 1, user_id: 1, created_at: new Date().toISOString(), updated_at: new Date().toISOString(), order_items: [products[0]] },
-  { id: 2, user_id: 1, created_at: new Date().toISOString(), updated_at: new Date().toISOString(), order_items: [products[1]] },
-];
+export async function GET(request: Request) {
+  try {
+    const authorization = request.headers.get('Authorization');
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    };
+    if (authorization) {
+        headers['Authorization'] = authorization;
+    }
 
-export async function GET() {
-  return NextResponse.json(orders.filter(o => !o.removed));
+    const res = await fetch(`${BACKEND_URL}/api/orders`, {
+        headers
+    });
+
+    if (!res.ok) {
+       return new Response(res.statusText, { status: res.status });
+    }
+    const json = await res.json();
+    return NextResponse.json(json.data);
+  } catch (error) {
+    console.error('Orders GET error:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const { user_id, product_ids } = await request.json();
-  const order_items = products.filter(p => product_ids.includes(p.id));
-  const newOrder: Order = {
-    id: orders.length + 1,
-    user_id,
-    order_items,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-  orders.push(newOrder);
-  return NextResponse.json(newOrder, { status: 201 });
+  try {
+    const authorization = request.headers.get('Authorization');
+    if (!authorization) {
+        return new Response('Unauthorized', { status: 401 });
+    }
+    const body = await request.json();
+    
+    const payload = {
+        description: body.description || "Order created via API",
+    };
+
+    const res = await fetch(`${BACKEND_URL}/api/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': authorization,
+      },
+      body: JSON.stringify({ order: payload }),
+    });
+
+    if (!res.ok) {
+        return new Response(res.statusText, { status: res.status });
+    }
+    const json = await res.json();
+    return NextResponse.json(json.data, { status: 201 });
+  } catch (error) {
+    console.error('Orders POST error:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 }

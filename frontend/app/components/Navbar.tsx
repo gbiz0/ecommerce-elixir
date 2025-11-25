@@ -20,7 +20,7 @@ const Navbar = () => {
           E-Commerce
         </Link>
         <div>
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <>
               <Link href="/products" className="mr-4">
                 Produtos
@@ -28,10 +28,22 @@ const Navbar = () => {
               <Link href="/orders" className="mr-4">
                 Pedidos
               </Link>
+              <Link href="/users" className="mr-4">
+                Usuários
+              </Link>
               <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                 Sair
               </button>
             </>
+          ) : (
+            <div className="space-x-4">
+              <Link href="/login" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Login
+              </Link>
+              <Link href="/register" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Registrar
+              </Link>
+            </div>
           )}
         </div>
       </div>
