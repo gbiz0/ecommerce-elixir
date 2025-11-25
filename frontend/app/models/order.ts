@@ -1,4 +1,4 @@
-import { Product } from './product';
+import { Product } from "./product";
 
 export interface Order {
   id: number;
@@ -6,6 +6,6 @@ export interface Order {
   description?: string;
   created_at: string;
   updated_at: string;
-  order_items?: Product[];
+  products?: Product[];
   removed?: boolean;
 }

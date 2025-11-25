@@ -1,9 +1,9 @@
 "use client";
 
-import { Product } from '@/app/models/product';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Product } from "@/app/models/product";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProductFormProps {
   product?: Product;
@@ -12,32 +12,35 @@ interface ProductFormProps {
 export default function ProductForm({ product }: ProductFormProps) {
   const router = useRouter();
   const { token } = useAuth();
-  const [title, setTitle] = useState(product?.title || '');
-  const [description, setDescription] = useState(product?.description || '');
+  const [title, setTitle] = useState(product?.title || "");
+  const [description, setDescription] = useState(product?.description || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const method = product ? 'PUT' : 'POST';
-    const url = product ? `/api/products/${product.id}` : '/api/products';
+    const method = product ? "PUT" : "POST";
+    const url = product ? `/api/products/${product.id}` : "/api/products";
 
     await fetch(url, {
       method,
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ title, description }),
     });
 
-    router.push('/products');
+    router.push("/products");
     router.refresh();
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
       <div className="mb-4">
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700"
+        >
           Título
         </label>
         <input
@@ -49,7 +52,10 @@ export default function ProductForm({ product }: ProductFormProps) {
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
           Descrição
         </label>
         <textarea
@@ -63,7 +69,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         type="submit"
         className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
-        {product ? 'Atualizar Produto' : 'Criar Produto'}
+        {product ? "Atualizar Produto" : "Criar Produto"}
       </button>
     </form>
   );

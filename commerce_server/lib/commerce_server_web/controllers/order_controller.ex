@@ -27,11 +27,16 @@ defmodule CommerceServerWeb.OrderController do
     render(conn, :show, order: order)
   end
 
-  def update(conn, %{"id" => id, "order" => order_params}) do
-    order = Shop.get_order!(conn.assigns.current_scope, id)
+  def update(conn, %{"id" => id, "order" => order_params} = params) do
+    scope = conn.assigns.current_scope
 
-    with {:ok, %Order{} = order} <-
-           Shop.update_order(conn.assigns.current_scope, order, order_params) do
+    order = Shop.get_order!(scope, id)
+
+    product_ids =
+      Map.get(order_params, "items") || Map.get(params, "items")
+
+    with {:ok, order} <-
+           Shop.update_order(conn.assigns.current_scope, order, order_params, product_ids) do
       render(conn, :show, order: order)
     end
   end

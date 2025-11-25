@@ -1,7 +1,7 @@
 "use client";
 
-import OrderForm from '@/app/components/orders/OrderForm';
-import withAuth from '../../components/withAuth';
+import OrderForm from "@/app/components/orders/OrderForm";
+import withAuth from "../../components/withAuth";
 
 function NewOrderPage() {
   return (

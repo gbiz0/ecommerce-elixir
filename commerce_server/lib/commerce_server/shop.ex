@@ -200,6 +200,7 @@ defmodule CommerceServer.Shop do
   """
   def get_order!(%Scope{} = scope, id) do
     Repo.get_by!(Order, id: id, user_id: scope.user.id)
+    |> Repo.preload(:products)
   end
 
   @doc """
@@ -253,15 +254,40 @@ defmodule CommerceServer.Shop do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_order(%Scope{} = scope, %Order{} = order, attrs) do
+  def update_order(%Scope{} = scope, %Order{} = order, attrs, product_ids \\ nil) do
     true = order.user_id == scope.user.id
 
-    with {:ok, order = %Order{}} <-
-           order
-           |> Order.changeset(attrs, scope)
-           |> Repo.update() do
-      broadcast_order(scope, {:updated, order})
-      {:ok, order}
+    new_products =
+      if product_ids do
+        Repo.all(from(p in Product, where: p.id in ^product_ids))
+      else
+        nil
+      end
+
+    if product_ids && new_products == [] do
+      {:error, :no_products_found}
+    else
+      order =
+        if new_products do
+          Repo.preload(order, :products)
+        else
+          order
+        end
+
+      order
+      |> Order.changeset(attrs, scope, new_products)
+      |> Repo.update()
+      |> case do
+        {:ok, updated_order} ->
+          updated_order =
+            if new_products, do: %{updated_order | products: new_products}, else: updated_order
+
+          broadcast_order(scope, {:updated, updated_order})
+          {:ok, updated_order}
+
+        {:error, changeset} ->
+          {:error, changeset}
+      end
     end
   end
 
