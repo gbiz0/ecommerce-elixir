@@ -15,7 +15,7 @@ defmodule CommerceServerWeb.ProductJSON do
     %{data: data(product)}
   end
 
-  defp data(%Product{} = product) do
+  def data(%Product{} = product) do
     %{
       id: product.id,
       title: product.title,

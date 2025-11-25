@@ -181,6 +181,7 @@ defmodule CommerceServer.Shop do
   """
   def list_orders(%Scope{} = scope) do
     Repo.all_by(Order, user_id: scope.user.id)
+    |> Repo.preload(:products)
   end
 
   @doc """
@@ -213,13 +214,30 @@ defmodule CommerceServer.Shop do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_order(%Scope{} = scope, attrs) do
-    with {:ok, order = %Order{}} <-
-           %Order{}
-           |> Order.changeset(attrs, scope)
-           |> Repo.insert() do
-      broadcast_order(scope, {:created, order})
-      {:ok, order}
+  def create_order(%Scope{} = scope, attrs, product_ids) do
+    # Fetch the product structs based on IDs and ensuring they belong to the user (security)
+    products =
+      Repo.all(
+        from(p in Product,
+          where: p.id in ^product_ids and p.user_id == ^scope.user.id
+        )
+      )
+
+    # Proceed only if we actually found products (Optional safety check)
+    if products == [] do
+      {:error, :no_products_found}
+    else
+      %Order{}
+      |> Order.changeset(attrs, scope, products)
+      |> Repo.insert()
+      |> case do
+        {:ok, order} ->
+          broadcast_order(scope, {:created, order})
+          {:ok, order}
+
+        {:error, changeset} ->
+          {:error, changeset}
+      end
     end
   end
 

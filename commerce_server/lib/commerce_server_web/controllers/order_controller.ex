@@ -4,15 +4,17 @@ defmodule CommerceServerWeb.OrderController do
   alias CommerceServer.Shop
   alias CommerceServer.Shop.Order
 
-  action_fallback CommerceServerWeb.FallbackController
+  action_fallback(CommerceServerWeb.FallbackController)
 
   def index(conn, _params) do
     orders = Shop.list_orders(conn.assigns.current_scope)
     render(conn, :index, orders: orders)
   end
 
-  def create(conn, %{"order" => order_params}) do
-    with {:ok, %Order{} = order} <- Shop.create_order(conn.assigns.current_scope, order_params) do
+  def create(conn, %{"order" => %{"items" => ids} = order_params}) do
+    scope = conn.assigns.current_scope
+
+    with {:ok, %Shop.Order{} = order} <- Shop.create_order(scope, order_params, ids) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", ~p"/api/orders/#{order}")
