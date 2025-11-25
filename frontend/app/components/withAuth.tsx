@@ -6,17 +6,17 @@ import { useAuth } from '../contexts/AuthContext';
 
 const withAuth = <P extends object>(WrappedComponent: React.ComponentType<P>) => {
   const Wrapper = (props: P) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, loading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-      if (!isAuthenticated) {
+      if (!loading && !isAuthenticated) {
         router.replace('/login');
       }
-    }, [isAuthenticated, router]);
+    }, [isAuthenticated, loading, router]);
 
-    if (!isAuthenticated) {
-      return null; // or a loading spinner
+    if (loading || !isAuthenticated) {
+      return <div>Loading...</div>;
     }
 
     return <WrappedComponent {...props} />;
