@@ -15,7 +15,7 @@ export default function OrderForm({ order }: OrderFormProps) {
   const { token } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>(
-    order?.order_items?.map((p) => p.id) || [],
+    order?.products?.map((p) => p.id) || [],
   );
   const [description, setDescription] = useState(order?.description || "");
 
@@ -29,8 +29,10 @@ export default function OrderForm({ order }: OrderFormProps) {
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
-            setProducts(data.filter((p: Product) => !p.removed));
+            setProducts(data.filter((p: Product) => p));
           }
+
+          console.log(data);
         })
         .catch(console.error);
     }
@@ -41,6 +43,8 @@ export default function OrderForm({ order }: OrderFormProps) {
 
     const method = order ? "PUT" : "POST";
     const url = order ? `/api/orders/${order.id}` : "/api/orders";
+
+    console.log(selectedProductIds);
 
     await fetch(url, {
       method,

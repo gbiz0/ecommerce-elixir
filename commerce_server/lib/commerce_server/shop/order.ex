@@ -6,7 +6,10 @@ defmodule CommerceServer.Shop.Order do
     field(:description, :string)
     field(:user_id, :id)
 
-    many_to_many(:products, CommerceServer.Shop.Product, join_through: "order_items")
+    many_to_many(:products, CommerceServer.Shop.Product,
+      join_through: "order_items",
+      on_replace: :delete
+    )
 
     timestamps(type: :utc_datetime)
   end
